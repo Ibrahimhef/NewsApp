@@ -8,7 +8,7 @@ public class CustomNews {
     private String sectionName;
 
 
-    public CustomNews(String webTitle, String webPublicationDate, String webUrl, String author, String sectionName) {
+    public CustomNews(String webTitle, String webPublicationDate, String webUrl, String sectionName, String author) {
         this.webTitle = webTitle;
         this.webPublicationDate = webPublicationDate;
         this.webUrl = webUrl;

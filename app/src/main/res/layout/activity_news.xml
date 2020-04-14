@@ -26,13 +26,34 @@
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
-            <fragment
-                android:id="@+id/fragment"
-                android:name="com.example.myapplication.Sport"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+                <ListView
+                    android:id="@+id/list_item_"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:orientation="vertical" />
+                <ProgressBar
+                    android:id="@+id/loading_indicator"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true" />
+                <TextView
+                    android:id="@+id/nocontent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textAppearance="?android:textAppearanceMedium" />
+            </RelativeLayout>
+
+
         </FrameLayout>
     </LinearLayout>
 

@@ -7,37 +7,40 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import java.util.List;
 
-public class CustomAdapter<T> extends ArrayAdapter {
+public class CustomAdapter  extends ArrayAdapter<CustomNews> {
 
-    public CustomAdapter(@NonNull Context context, List<CustomNews> informations) {
-        super(context, 0, informations);
+    public CustomAdapter(Context context, List<CustomNews> customNews) {
+        super(context, 0, customNews);
     }
 
-
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View listItemViews = convertView;
-        if (listItemViews == null) {
-            listItemViews = LayoutInflater.from(getContext()).inflate(R.layout.layou_viwer, parent, false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            view = LayoutInflater.from(getContext()).inflate(
+                    R.layout.layou_viwer, parent, false);
         }
 
-        CustomNews news = (CustomNews) getItem(position);
+        CustomNews currentNews = getItem(position);
+        TextView newsTitleTextView = (TextView) view.findViewById(R.id.title_text_view);
+        String title = currentNews.getWebTitle();
+        newsTitleTextView.setText(title);
 
-        TextView title = (TextView) listItemViews.findViewById(R.id.title);
-        TextView date = (TextView) listItemViews.findViewById(R.id.date);
-        TextView section = (TextView) listItemViews.findViewById(R.id.section);
 
+        TextView newsCategorytextView = (TextView) view.findViewById(R.id.category_text_view);
+        String category = currentNews.getSectionName();
+        newsCategorytextView.setText(category);
 
-        title.setText(news.getWebTitle());
-        date.setText(news.getWebPublicationDate());
-        section.setText(news.getSectionName());
+        TextView newsDatetextView = (TextView) view.findViewById(R.id.date_text_view);
+        String date = currentNews.getWebPublicationDate();
+        newsDatetextView.setText(date);
 
-        return listItemViews;
+        TextView newsAuthortextView = (TextView) view.findViewById(R.id.author_text_view);
+        String author = currentNews.getAuthor();
+        newsAuthortextView.setText(author);
+
+        return view;
     }
 }

@@ -1,27 +1,38 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class News extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class News extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<List<CustomNews>> {
     @BindView(R.id.main_drew)
     DrawerLayout drawerLayout;
     @BindView(R.id.main_linear)
@@ -30,48 +41,71 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
     FrameLayout frameLayout;
     @BindView(R.id.mian_nav)
     NavigationView navigationView;
-    static Fragment fragment;
+    @BindView(R.id.nocontent)
+    TextView noConect;
+
+    CustomAdapter customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         ButterKnife.bind(this);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        change(fragment);
 
         navigationView.setNavigationItemSelectedListener(this);
+        ListView listView = findViewById(R.id.list_item_);
+        listView.setEmptyView(noConect);
+        customAdapter = new CustomAdapter(this,new ArrayList<CustomNews>());
 
+        listView.setAdapter(customAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CustomNews currentNews = customAdapter.getItem(position);
+                Uri newsUri = Uri.parse(currentNews.getWebUrl());
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
+                startActivity(websiteIntent);
+            }
+        });
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
+        if(networkInfo != null && networkInfo.isConnected()){
+            LoaderManager.getInstance(this).initLoader(0,null,this);
+        }else {
+            View loadingIndicator = findViewById(R.id.loading_indicator);
+            loadingIndicator.setVisibility(View.GONE);
+            noConect.setText(R.string.noConect);
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_fainance:
-                change(new finance());
+
                 break;
             case R.id.nav_fashion:
-                change(new Fashion());
+
                 break;
             case R.id.nav_seinece:
-                change(new Seince());
+
                 break;
             case R.id.nav_sport:
-                change(new Sport());
+
                 break;
             case R.id.nav_support:
-                startActivity(new Intent(News.this,Support.class));
+                startActivity(new Intent(News.this, Support.class));
                 break;
             case R.id.nav_world:
-                change(new World());
+
                 break;
             case R.id.nav_tech:
-                change(new Tech());
+
                 break;
         }
         return true;
@@ -85,11 +119,26 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
             super.onBackPressed();
     }
 
-    private void change(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment, fragment);
-        ft.commit();
+
+    @NonNull
+    @Override
+    public Loader<List<CustomNews>> onCreateLoader(int id, @Nullable Bundle args) {
+        return new com.example.myapplication.Loader(this);
     }
 
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<CustomNews>> loader, List<CustomNews> data) {
+        View loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.setVisibility(View.GONE);
+        noConect.setText(R.string.noNwes);
+        customAdapter.clear();
+        if (data != null && !data.isEmpty()) {
+            customAdapter.addAll(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<CustomNews>> loader) {
+        customAdapter.clear();
+    }
 }

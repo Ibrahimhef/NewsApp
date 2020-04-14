@@ -34,42 +34,42 @@ public class MainActivity extends AppCompatActivity {
         sport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                News.fragment = new Sport();
+
                 startActivity(new Intent(MainActivity.this, News.class));
             }
         });
         fashion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                News.fragment = new Fashion();
+
                 startActivity(new Intent(MainActivity.this, News.class));
             }
         });
         world.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                News.fragment = new World();
+
                 startActivity(new Intent(MainActivity.this, News.class));
             }
         });
         seince.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                News.fragment = new Seince();
+
                 startActivity(new Intent(MainActivity.this, News.class));
             }
         });
         finance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                News.fragment = new finance();
+
                 startActivity(new Intent(MainActivity.this, News.class));
             }
         });
         techno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                News.fragment = new Tech();
+
                 startActivity(new Intent(MainActivity.this, News.class));
             }
         });
