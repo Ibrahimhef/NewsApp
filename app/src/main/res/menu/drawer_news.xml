@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+        <item
+            android:id="@+id/nav_world"
+            android:title="@string/news_world" />
+        <item
+            android:id="@+id/nav_fashion"
+            android:title="@string/news_fashion" />
+        <item
+            android:id="@+id/nav_sport"
+            android:title="@string/news_sport" />
+        <item
+            android:id="@+id/nav_fainance"
+            android:title="@string/news_finance" />
+        <item
+            android:id="@+id/nav_seinece"
+            android:title="@string/news_seince" />
+        <item
+            android:id="@+id/nav_tech"
+            android:title="@string/news_thec" />
+        <item
+            android:id="@+id/nav_support"
+            android:title="@string/support" />
+
+
+</menu>
