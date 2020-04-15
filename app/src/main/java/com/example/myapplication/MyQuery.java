@@ -109,7 +109,8 @@ public class MyQuery {
             JSONObject baseJsonResponse = new JSONObject(newsJSON);
             JSONObject response = baseJsonResponse.getJSONObject("response");
             JSONArray jsonArray = response.getJSONArray("results");
-
+            jsonArray.toString().replace("[","");
+            jsonArray.toString().replace("]","");
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONObject currentResults = jsonArray.getJSONObject(i);
@@ -127,7 +128,7 @@ public class MyQuery {
                     author = "No Author found..";
                 }
 
-                CustomNews customNews1 = new CustomNews(Title, category, date, url, author);
+                CustomNews customNews1 = new CustomNews(Title, date, category, url, author);
 
                 customNews.add(customNews1);
             }

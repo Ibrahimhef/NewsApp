@@ -43,7 +43,8 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
     NavigationView navigationView;
     @BindView(R.id.nocontent)
     TextView noConect;
-
+    ListView listView;
+    static List<CustomNews> customNewsList;
     CustomAdapter customAdapter;
 
     @Override
@@ -57,7 +58,7 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-        ListView listView = findViewById(R.id.list_item_);
+         listView = findViewById(R.id.list_item_);
         listView.setEmptyView(noConect);
         customAdapter = new CustomAdapter(this,new ArrayList<CustomNews>());
 
@@ -67,7 +68,9 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CustomNews currentNews = customAdapter.getItem(position);
                 Uri newsUri = Uri.parse(currentNews.getWebUrl());
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
+
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW);
+                websiteIntent.setData(newsUri);
                 startActivity(websiteIntent);
             }
         });
@@ -75,7 +78,7 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if(networkInfo != null && networkInfo.isConnected()){
-            LoaderManager.getInstance(this).initLoader(0,null,this);
+            LoaderManager.getInstance(this).initLoader(1,null,this);
         }else {
             View loadingIndicator = findViewById(R.id.loading_indicator);
             loadingIndicator.setVisibility(View.GONE);
@@ -86,6 +89,11 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_all:
+                List<CustomNews> all = customNewsList;
+                customAdapter = new CustomAdapter(this,all);
+                listView.setAdapter(customAdapter);
+                break;
             case R.id.nav_fainance:
 
                 break;
@@ -123,7 +131,7 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
     @NonNull
     @Override
     public Loader<List<CustomNews>> onCreateLoader(int id, @Nullable Bundle args) {
-        return new com.example.myapplication.Loader(this);
+        return new CustomLoader(this);
     }
 
     @Override
@@ -132,6 +140,7 @@ public class News extends AppCompatActivity implements NavigationView.OnNavigati
         loadingIndicator.setVisibility(View.GONE);
         noConect.setText(R.string.noNwes);
         customAdapter.clear();
+        customNewsList=data;
         if (data != null && !data.isEmpty()) {
             customAdapter.addAll(data);
         }

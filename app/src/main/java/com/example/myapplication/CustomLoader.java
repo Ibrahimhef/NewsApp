@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CustomLoader extends AsyncTaskLoader<List<CustomNews>> {
     private static final String API_URL =
-            "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test";
+            "https://content.guardianapis.com/search?show-tags=contributor&api-key=test";
 
 
     public CustomLoader(@NonNull Context context) {
